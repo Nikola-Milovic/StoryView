@@ -11,15 +11,18 @@ import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.nikolam.library.R;
+import com.nikolam.library.progress.ProgressListener;
 import com.nikolam.library.progress.StoriesProgressView;
 
 import java.util.List;
 
-public class StoryView extends FrameLayout {
+public class StoryView extends FrameLayout implements ProgressListener {
 
    private StoriesProgressView progressBar;
 
    private ImageView image;
+
+   private int currentStoryPosition = 0;
 
    private List<String> imageUrls;
 
@@ -48,13 +51,44 @@ public class StoryView extends FrameLayout {
     public void addImageUrls(List<String> urls){
         imageUrls = urls;
         progressBar.initializeProgressBars(imageUrls.size());
-        progressBar.startFromSpecificBar(0);
+        progressBar.startFromSpecificBar(currentStoryPosition);
+
+        progressBar.setListener(this);
 
         image.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-        Glide.with(image).load(imageUrls.get(0)).into(image);
+        Glide.with(image).load(imageUrls.get(currentStoryPosition)).into(image);
+
+        preloadImage();
 
     }
 
+
+    //Todo add exception
+    public void nextStory()  {
+        if(currentStoryPosition == imageUrls.size()-1){
+            //throw new Exception();
+            return;
+        }
+
+        currentStoryPosition++;
+        Glide.with(image).load(imageUrls.get(currentStoryPosition)).into(image);
+        progressBar.startFromSpecificBar(currentStoryPosition);
+         preloadImage();
+
+    }
+
+    @Override
+    public void onStoryEnd() {
+        super.onAnimationEnd();
+        nextStory();
+    }
+
+    private void preloadImage(){
+        if(currentStoryPosition + 1 != imageUrls.size())
+        Glide.with(image)
+                .load(imageUrls.get(currentStoryPosition+1))
+                .preload();
+    }
 
 }

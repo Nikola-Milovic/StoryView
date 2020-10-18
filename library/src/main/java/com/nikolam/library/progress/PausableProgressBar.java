@@ -25,6 +25,8 @@ public class PausableProgressBar extends FrameLayout {
 
     private PausableProgressAnimation animation;
 
+    public ProgressListener listener;
+
     public PausableProgressBar(@NonNull Context context) {
         super(context);
         init(context);
@@ -75,7 +77,7 @@ public class PausableProgressBar extends FrameLayout {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-
+                listener.onStoryEnd();
             }
         });
         animation.setFillAfter(true);

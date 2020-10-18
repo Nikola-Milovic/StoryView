@@ -22,6 +22,8 @@ public class StoriesProgressView extends LinearLayout {
 
     private final List<PausableProgressBar> progressBars = new ArrayList<>();
 
+    private ProgressListener listener;
+
     public StoriesProgressView(Context context) {
         super(context);
     }
@@ -89,6 +91,11 @@ public class StoriesProgressView extends LinearLayout {
     }
 
 
+    public void setListener(ProgressListener listener) {
+        this.listener = listener;
+        for(int i = 0; i < progressBars.size(); i++){
+            progressBars.get(i).listener = listener;
+        }
 
-
+    }
 }
