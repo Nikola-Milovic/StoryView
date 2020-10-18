@@ -15,7 +15,8 @@ import android.widget.FrameLayout;
 
 import com.nikolam.library.R;
 
-final class PausableProgressBar extends FrameLayout {
+//Todo make private
+public class PausableProgressBar extends FrameLayout {
 
     private static final int DEFAULT_PROGRESS_DURATION = 2000;
 
@@ -23,12 +24,35 @@ final class PausableProgressBar extends FrameLayout {
     private View maxProgressView;
 
     private PausableProgressAnimation animation;
-    private long duration = DEFAULT_PROGRESS_DURATION;
-
 
     public PausableProgressBar(@NonNull Context context) {
         super(context);
-        View view = LayoutInflater.from(context).inflate(R.layout.pausable_progress, this);
+        init(context);
+    }
+
+    public PausableProgressBar(@NonNull Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+        init(context);
+    }
+
+    public PausableProgressBar(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init(context);
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
+
+    private long duration = DEFAULT_PROGRESS_DURATION;
+
+
+    private  void init(Context context){
+        View view = inflate(context, R.layout.pausable_progress, this);
         frontProgressView = view.findViewById(R.id.front_progress);
         maxProgressView = view.findViewById(R.id.max_progress);
     }
@@ -67,6 +91,7 @@ final class PausableProgressBar extends FrameLayout {
             animation.cancel();
         }
     }
+    //Todo Make these protected probably
 
     public void pauseProgress() {
         if (animation != null) {
@@ -109,18 +134,12 @@ final class PausableProgressBar extends FrameLayout {
             return super.getTransformation(currentTime, outTransformation, scale);
         }
 
-        /***
-         * pause animation
-         */
         void pause() {
             if (mPaused) return;
             mElapsed = 0;
             mPaused = true;
         }
 
-        /***
-         * resume animation
-         */
         void resume() {
             mPaused = false;
         }

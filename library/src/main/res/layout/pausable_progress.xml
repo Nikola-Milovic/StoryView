@@ -24,4 +24,5 @@
         android:layout_height="@dimen/progress_bar_height"
         android:background="#fff"
         android:visibility="gone" />
+
 </FrameLayout>

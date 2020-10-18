@@ -59,6 +59,23 @@ public class StoriesProgressView extends LinearLayout {
         }
     }
 
+
+    public void startFromSpecificBar(int position) throws IndexOutOfBoundsException{
+        if(position < 0 || position > progressBars.size()){
+            throw new IndexOutOfBoundsException("Invalid index " + position);
+        }
+        for(int i = 0; i < position; i++){
+            progressBars.get(i).setBarToFull();
+        }
+        progressBars.get(position).startProgress();
+    }
+
+    public void setStoryDuration(Long duration){
+        for(PausableProgressBar bar : progressBars){
+            bar.setDuration(duration);
+        }
+    }
+
     private PausableProgressBar createProgressbar(){
         PausableProgressBar bar = new PausableProgressBar(getContext());
         bar.setLayoutParams(PROGRESS_BAR_LAYOUT_PARAM);
