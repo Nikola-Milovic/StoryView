@@ -1,6 +1,9 @@
 package com.nikolam.library.progress;
 
 import android.content.Context;
+import androidx.annotation.AttrRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +12,6 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.Transformation;
 import android.widget.FrameLayout;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.nikolam.library.R;
 
@@ -28,18 +28,11 @@ final class PausableProgressBar extends FrameLayout {
 
     public PausableProgressBar(@NonNull Context context) {
         super(context);
+        View view = LayoutInflater.from(context).inflate(R.layout.pausable_progress, this);
+        frontProgressView = view.findViewById(R.id.front_progress);
+        maxProgressView = view.findViewById(R.id.max_progress);
     }
 
-    public PausableProgressBar(@NonNull Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public PausableProgressBar(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        LayoutInflater.from(context).inflate(R.layout.pausable_progress, this);
-        frontProgressView = findViewById(R.id.front_progress);
-        maxProgressView = findViewById(R.id.max_progress); // work around
-    }
     public void startProgress() {
         maxProgressView.setVisibility(GONE);
 
@@ -65,6 +58,16 @@ final class PausableProgressBar extends FrameLayout {
         frontProgressView.startAnimation(animation);
     }
 
+    void setBarToFull() {
+        maxProgressView.setBackgroundResource(R.color.progress_max_active);
+
+        maxProgressView.setVisibility(VISIBLE);
+        if (animation != null) {
+            animation.setAnimationListener(null);
+            animation.cancel();
+        }
+    }
+
     public void pauseProgress() {
         if (animation != null) {
             animation.pause();
@@ -86,7 +89,7 @@ final class PausableProgressBar extends FrameLayout {
     }
 
 
-    private static class PausableProgressAnimation extends ScaleAnimation{
+    private static class PausableProgressAnimation extends ScaleAnimation {
 
         private boolean mPaused = false;
         private long mElapsed = 0;
@@ -94,6 +97,7 @@ final class PausableProgressBar extends FrameLayout {
         public PausableProgressAnimation(float fromX, float toX, float fromY, float toY, int pivotXType, float pivotXValue, int pivotYType, float pivotYValue) {
             super(fromX, toX, fromY, toY, pivotXType, pivotXValue, pivotYType, pivotYValue);
         }
+
         @Override
         public boolean getTransformation(long currentTime, Transformation outTransformation, float scale) {
             if (mPaused && mElapsed == 0) {
@@ -121,7 +125,6 @@ final class PausableProgressBar extends FrameLayout {
             mPaused = false;
         }
     }
-
 
 
 }
