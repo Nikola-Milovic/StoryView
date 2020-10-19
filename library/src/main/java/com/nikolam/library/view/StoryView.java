@@ -16,6 +16,8 @@ import com.nikolam.library.progress.StoriesProgressView;
 
 import java.util.List;
 
+//Todo, add previous story, left or right click and swipe to go back and forward
+// fix lag with image loading
 public class StoryView extends FrameLayout implements ProgressListener {
 
    private StoriesProgressView progressBar;
